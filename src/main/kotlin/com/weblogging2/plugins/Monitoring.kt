@@ -22,5 +22,7 @@ fun Application.configureMonitoring() {
         mdc("reqKey") { call ->
             call.request.headers["Host"]
         }
+
+        MDC.put("reqKey", "req1234")
     }
 }
