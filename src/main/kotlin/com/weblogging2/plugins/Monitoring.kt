@@ -1,12 +1,17 @@
 package com.weblogging2.plugins
 
+import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.callid.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.request.*
 import org.slf4j.MDC
 import org.slf4j.event.*
 
 fun Application.configureMonitoring() {
+    install(CallId) {
+        generate(10, "abcde12345")
+    }
     install(CallLogging) {
         level = Level.INFO
         filter { call ->
@@ -19,8 +24,9 @@ fun Application.configureMonitoring() {
             val userAgent = call.request.headers["User-Agent"]
             "Status: $status, Path:$path HTTP method: $httpMethod, User agent: $userAgent"
         }
-        mdc("reqKey") { call ->
+        mdc("reqHost") { call ->
             call.request.headers["Host"]
         }
+        callIdMdc("call-id")
     }
 }
