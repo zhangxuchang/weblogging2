@@ -10,19 +10,17 @@ fun Application.configureMonitoring() {
     install(CallLogging) {
         level = Level.INFO
         filter { call ->
-            call.request.path().startsWith("/api/v1")
+            call.request.path().startsWith("/api/")
         }
         format { call ->
             val status = call.response.status()
             val httpMethod = call.request.httpMethod.value
+            val path = call.request.path()
             val userAgent = call.request.headers["User-Agent"]
-            val reqKey = MDC.get("reqKey")
-            "Status: $status, req-key:$reqKey HTTP method: $httpMethod, User agent: $userAgent"
+            "Status: $status, Path:$path HTTP method: $httpMethod, User agent: $userAgent"
         }
         mdc("reqKey") { call ->
             call.request.headers["Host"]
         }
-
-        MDC.put("reqKey", "req1234")
     }
 }
