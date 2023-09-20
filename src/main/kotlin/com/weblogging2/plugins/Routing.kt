@@ -9,5 +9,12 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("Hello World!")
         }
+        get("/api/v1") {
+            call.application.environment.log.info("Hello from /api/v1!")
+            call.respondText("Hello, world!")
+        }
+        get("/api/v2") {
+            call.respondText("Bye!")
+        }
     }
 }
